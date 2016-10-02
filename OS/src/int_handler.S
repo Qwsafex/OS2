@@ -16,6 +16,8 @@ isr_wrapper:
 	
 	movq 72(%rsp), %rdi
 	
+	cld
+
 	call int_handler
 	
 	popq %r11
