@@ -11,16 +11,12 @@ void init_int_desc(struct int_desc *IDT, uint64_t offset, uint16_t CS, uint8_t i
 }
 
 void init_ints(){
-	disable_ints();
-
 	struct desc_table_ptr ptr = {sizeof(IDT) - 1, (uint64_t)IDT};
 	write_idtr(&ptr);
 
 	for (int i = 0; i < INT_COUNT; i++) {
 		init_int_desc(IDT + i, addrs[i], KERNEL_CS, 0, 14, 0);
 	}
-
-	enable_ints();
 }
 
 int timer_cnt = 0;

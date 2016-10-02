@@ -23,6 +23,8 @@ void init_PIC(){
 	out8(MASTER_DATA_PORT, 1);
 	out8(SLAVE_DATA_PORT, 1);
 	mask_all();
+
+	enable_ints();
 }
 
 void apply_mask(){

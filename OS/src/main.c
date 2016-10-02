@@ -25,9 +25,8 @@ void main(void)
 
 	__asm__("int $0");
 
-	unmask(0);
-
 	init_PIT();
+	unmask(0);
 
 	while (1);
 }
