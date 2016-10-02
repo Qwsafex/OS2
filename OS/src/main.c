@@ -9,14 +9,20 @@ static void qemu_gdb_hang(void)
 
 #include <desc.h>
 #include <ints.h>
+#include <serial.h>
 
 void main(void)
 {
 	qemu_gdb_hang();
 
-	struct desc_table_ptr ptr = {0, 0};
+//	init_serial();
+	write_serial_string("Hello, Ilya");
 
-	write_idtr(&ptr);
+	init_ints();
+	write_serial_string("Four");
 
-	while (1);
+
+	while (1){
+//		write_serial_char('#');
+	}
 }
