@@ -7,6 +7,8 @@ static void qemu_gdb_hang(void)
 #endif
 }
 
+#include <PIC.h>
+#include <PIT.h>
 #include <desc.h>
 #include <ints.h>
 #include <serial.h>
@@ -15,14 +17,17 @@ void main(void)
 {
 	qemu_gdb_hang();
 
-//	init_serial();
-	write_serial_string("Hello, Ilya");
+	init_serial();
+	write_serial_string("Hello!\n");
 
 	init_ints();
-	write_serial_string("Four");
+	init_PIC();
 
+	__asm__("int $0");
 
-	while (1){
-//		write_serial_char('#');
-	}
+	unmask(0);
+
+	init_PIT();
+
+	while (1);
 }
