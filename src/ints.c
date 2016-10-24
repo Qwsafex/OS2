@@ -25,7 +25,7 @@ void int_handler(int n){
 	if (n == 32){
 		timer_cnt++;
 		if (timer_cnt == 8){
-			write_serial_string("Timer interrupt.\n");
+			//write_serial_string("Timer interrupt.\n");
 			timer_cnt = 0;
 		}
 	}
