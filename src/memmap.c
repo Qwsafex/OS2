@@ -5,13 +5,15 @@ uint32_t memmap_table_size = 0;
 struct memmap_entry memmap_table[MAX_MEMMAP_TABLE_SIZE];
 uint64_t mem_size;
 
+extern char text_phys_begin[];
+extern char bss_phys_end[];
 extern uint64_t multiboot_info;
 extern uint32_t multiboot_header[];
 
 void read_memmap() {
     struct memmap_entry kernel_entry;
-    kernel_entry.base_addr = multiboot_header[4]; 
-    kernel_entry.length = multiboot_header[6] - kernel_entry.base_addr; 
+    kernel_entry.base_addr = (uint64_t) text_phys_begin; 
+    kernel_entry.length = (uint64_t) bss_phys_end - kernel_entry.base_addr; 
     kernel_entry.type = 0;
     memmap_table[memmap_table_size++] = kernel_entry;
 

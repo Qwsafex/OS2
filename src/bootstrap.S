@@ -19,7 +19,6 @@ start32:
 multiboot_info:
     .quad 0
 
-.global multiboot_header
 	.align 16
 multiboot_header:
 	.long MB_HEADER_MAGIC
