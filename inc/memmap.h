@@ -19,7 +19,7 @@ extern uint32_t memmap_table_size;
 extern struct memmap_entry memmap_table[];
 extern uint64_t mem_size;
 
-void read_memmap();
+void init_mem();
 void print_memmap();
 
 #endif

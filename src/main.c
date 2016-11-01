@@ -13,6 +13,8 @@ static void qemu_gdb_hang(void)
 #include <desc.h>
 #include <ints.h>
 #include <serial.h>
+#include <printf.h>
+#include <buddy.h>
 
 void init(){
 	init_serial();
@@ -23,7 +25,7 @@ void init(){
 	init_PIT();
 	unmask(0);
 
-	read_memmap();
+	init_mem();
 }
 
 void main(void)
@@ -31,7 +33,22 @@ void main(void)
 	qemu_gdb_hang();
 
 	init();
-	print_memmap();
+
+	// buddy test
+    void* page_addr_0 = (void*) buddy_alloc(0, 0);
+    printf("%llx\n", page_addr_0);
+    void* page_addr_1 = (void*) buddy_alloc(0, 0);
+    printf("%llx\n", page_addr_1);
+    buddy_free(page_addr_0);
+    page_addr_0 = (void*) buddy_alloc(5, 0);
+    printf("%llx\n", page_addr_0);
+    buddy_free(page_addr_0);
+    page_addr_0 = (void*) buddy_alloc(5, 0);
+    printf("%llx\n", page_addr_0);
+    buddy_free(page_addr_0);
+    buddy_free(page_addr_1);
+    page_addr_0 = (void*) buddy_alloc(1, 0);
+    printf("%llx\n", page_addr_0);
 
 	while (1);
 }

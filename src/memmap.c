@@ -1,5 +1,6 @@
-#include "memmap.h"
-#include "printf.h"
+#include <memmap.h>
+#include <printf.h>
+#include <buddy.h>
 
 uint32_t memmap_table_size = 0;
 struct memmap_entry memmap_table[MAX_MEMMAP_TABLE_SIZE];
@@ -9,7 +10,7 @@ extern char text_phys_begin[];
 extern char bss_phys_end[];
 extern uint64_t multiboot_info;
 
-void read_memmap() {
+void init_mem() {
     struct memmap_entry kernel_entry;
     kernel_entry.base_addr = (uint64_t) text_phys_begin; 
     kernel_entry.length = (uint64_t) bss_phys_end - kernel_entry.base_addr; 
@@ -57,6 +58,10 @@ void read_memmap() {
             mem_size = memmap_table[i].base_addr + memmap_table[i].length;
         }
     }
+
+    print_memmap();
+
+    buddy_init(memmap_table, memmap_table_size);
 }
 
 void print_memmap() {
