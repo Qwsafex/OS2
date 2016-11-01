@@ -8,7 +8,6 @@ uint64_t mem_size;
 extern char text_phys_begin[];
 extern char bss_phys_end[];
 extern uint64_t multiboot_info;
-extern uint32_t multiboot_header[];
 
 void read_memmap() {
     struct memmap_entry kernel_entry;
