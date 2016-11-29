@@ -4,6 +4,7 @@
 #include <utils.h>
 #include <printf.h>
 #include <limits.h>
+#include <lock.h>
 
 #define BUDDY_FREE 0
 #define BUDDY_USED 1
@@ -144,6 +145,8 @@ static void buddy_make(int level) {
 }
 
 void* buddy_alloc(int level, uint16_t cache_size) {
+    lock();
+
     buddy_make(level);
     if (lists[level].head == ULLONG_MAX) {
         printf("ERROR: buddy failed to alloc.\n");
@@ -155,7 +158,9 @@ void* buddy_alloc(int level, uint16_t cache_size) {
     descs[result].state = BUDDY_USED;
     descs[result].cache_size = cache_size;
 
-    return (void *) (((unsigned long) PAGE_SIZE) * result);
+    void *ret = (void *) (((unsigned long) PAGE_SIZE) * result);
+    unlock();
+    return ret;
 }
 
 static void buddy_add(uint64_t desc_num) {
@@ -186,9 +191,13 @@ struct buddy_desc* buddy_get_desc(void *logical) {
 }
 
 void buddy_free(void *logical) {
+    lock();
+
     struct buddy_desc *desc = buddy_get_desc(logical);
     desc->state = BUDDY_FREE;
     unsigned long phys_addr = ((unsigned long) logical);
     uint64_t desc_number = phys_addr / PAGE_SIZE; 
     buddy_add(desc_number);
+
+    unlock();
 }
